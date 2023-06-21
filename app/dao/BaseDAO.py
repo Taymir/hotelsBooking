@@ -1,5 +1,5 @@
 # dao - data access object
-from sqlalchemy import select
+from sqlalchemy import select, insert
 
 from app.bookings.models import Bookings
 from app.database import async_session_maker
@@ -29,3 +29,9 @@ class BaseDAO:
             res = await session.execute(query)
             return res.scalars().all()
 
+    @classmethod
+    async def add(cls, **data):
+        async with async_session_maker() as session:
+            query = insert(cls.model).values(**data)
+            await session.execute(query)
+            await session.commit()
