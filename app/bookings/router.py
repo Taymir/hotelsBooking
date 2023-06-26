@@ -37,3 +37,4 @@ async def remove_booking(booking_id: int, user: Users = Depends(get_current_user
     if not booking or booking.user_id != user.id:
         raise BookingNotFoundException
     return await BookingDAO.remove(booking_id)
+
