@@ -48,6 +48,7 @@ class HotelDAO(BaseDAO):
             # WHERE
             # hotels.location LIKE '%Алтай%'
             # GROUP BY rooms.id, hotels.id
+            # HAVING COUNT(booked_rooms.id) < rooms.quantity
             get_hotels_available = select(
                 Hotels.id,
                 Hotels.name,
@@ -65,7 +66,6 @@ class HotelDAO(BaseDAO):
             ).group_by(Rooms.id, Hotels.id).having(
                 func.count(booked_rooms.c.id) < Rooms.quantity
             )
-            # HAVING COUNT(booked_rooms.id) < rooms.quantity
 
             # print(get_hotels_available.compile(engine, compile_kwargs={"literal_binds": True}))
             res = await session.execute(get_hotels_available)
