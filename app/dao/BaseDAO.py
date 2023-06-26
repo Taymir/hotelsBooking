@@ -1,5 +1,5 @@
 # dao - data access object
-from sqlalchemy import select, insert
+from sqlalchemy import select, insert, delete
 
 from app.bookings.models import Bookings
 from app.database import async_session_maker
@@ -35,3 +35,11 @@ class BaseDAO:
             query = insert(cls.model).values(**data)
             await session.execute(query)
             await session.commit()
+
+    @classmethod
+    async def remove(cls, model_id: int):
+        async with async_session_maker() as session:
+            query = delete(cls.model).filter_by(id=model_id)
+            await session.execute(query)
+            await session.commit()
+
