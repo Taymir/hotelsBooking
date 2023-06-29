@@ -69,4 +69,4 @@ class HotelDAO(BaseDAO):
 
             # print(get_hotels_available.compile(engine, compile_kwargs={"literal_binds": True}))
             res = await session.execute(get_hotels_available)
-            return res.all()
+            return res.mappings().all() # Решает проблему приведения типа для кэширования

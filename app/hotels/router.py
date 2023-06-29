@@ -1,6 +1,8 @@
 from datetime import date
 
 from fastapi import APIRouter
+from fastapi_cache.decorator import cache
+from pydantic import parse_obj_as
 
 from app.hotels.dao import HotelDAO
 from app.hotels.schemas import SHotel, SHotelWithRoomsLeft
@@ -12,12 +14,14 @@ router = APIRouter(
 
 
 @router.get('{location}')
+@cache(expire=20)
 async def get_hotels(
     location: str,
     date_from: date,
     date_to: date
-) -> list[SHotelWithRoomsLeft]:
-    return await HotelDAO.find_hotels_with_free_rooms(location=location, date_from=date_from, date_to=date_to)
+):
+    hotels = await HotelDAO.find_hotels_with_free_rooms(location=location, date_from=date_from, date_to=date_to)
+    return hotels
 
 
 @router.get('/id/{hotel_id}')
