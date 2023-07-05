@@ -1,3 +1,4 @@
+import datetime
 from datetime import date
 from operator import or_
 
@@ -6,6 +7,7 @@ from sqlalchemy import select, and_, func
 from app.bookings.models import Bookings
 from app.dao.BaseDAO import BaseDAO
 from app.database import async_session_maker, engine
+from app.exceptions import DateFromBeforeDateToException, TooLongDatePeriodException
 from app.hotels.models import Hotels
 from app.hotels.rooms.models import Rooms
 
@@ -20,6 +22,12 @@ class HotelDAO(BaseDAO):
         date_from: date,
         date_to: date,
     ):
+        # Проверяем корректность пераданных дат
+        if date_to <= date_from:
+            raise DateFromBeforeDateToException
+        if (date_to - date_from) > datetime.timedelta(days=30):
+            raise TooLongDatePeriodException
+
         async with async_session_maker() as session:
             # WITH booked_rooms AS (
             # 	SELECT * FROM bookings WHERE

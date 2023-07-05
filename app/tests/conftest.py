@@ -1,6 +1,7 @@
 import asyncio
 import json
 from datetime import datetime
+from unittest import mock
 
 import pytest
 from sqlalchemy import insert
@@ -53,7 +54,7 @@ async def prepare_database():
 
 
 @pytest.fixture(scope="session")
-def event_loop (request):
+def event_loop(request):
     """Create an instance of the default event loop for each test case."""
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
@@ -75,7 +76,7 @@ async def session():
 @pytest.fixture(scope="session")
 async def authenticated_ac():
     async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
-        res = await ac.post('auth/login', json={
+        res = await ac.post('/auth/login', json={
             'email': 'test@test.com',
             'password': 'test',
         })

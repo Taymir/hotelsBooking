@@ -37,7 +37,7 @@ async def add_booking(
     return booking_dict
 
 
-@router.delete('{booking_id}')
+@router.delete('/{booking_id}')
 async def remove_booking(booking_id: int, user: Users = Depends(get_current_user)):
     booking = await BookingDAO.find_one_or_none(id=booking_id)
     if not booking or booking.user_id != user.id:

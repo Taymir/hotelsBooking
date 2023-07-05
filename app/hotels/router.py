@@ -13,7 +13,7 @@ router = APIRouter(
 )
 
 
-@router.get('{location}')
+@router.get('/{location}')
 @cache(expire=20)
 async def get_hotels(
     location: str,

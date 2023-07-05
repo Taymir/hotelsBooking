@@ -6,6 +6,7 @@ from sqlalchemy import select, func, and_, or_, insert
 from app.bookings.models import Bookings
 from app.dao.BaseDAO import BaseDAO
 from app.database import async_session_maker, engine
+from app.exceptions import RoomCannotBeBooked
 from app.hotels.rooms.models import Rooms
 
 
@@ -97,4 +98,4 @@ class BookingDAO(BaseDAO):
             await session.commit()
             return new_booking.scalar()
         else:
-            return None
+            raise RoomCannotBeBooked

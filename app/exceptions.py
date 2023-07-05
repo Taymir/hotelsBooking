@@ -38,3 +38,13 @@ BookingNotFoundException = HTTPException(
     status_code=status.HTTP_404_NOT_FOUND,
     detail="Бронирование не найдено"
 )
+
+TooLongDatePeriodException = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Слишком длинный период бронирования (больше 30 дней)"
+)
+
+DateFromBeforeDateToException = HTTPException(
+    status_code=status.HTTP_400_BAD_REQUEST,
+    detail="Дата начала бронирования больше или равна даты окончания"
+)
